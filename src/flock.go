@@ -3,6 +3,8 @@ package birds
 import (
 	"fmt"
 	"strings"
+
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type Flock struct {
@@ -56,17 +58,26 @@ func (flock Flock) Direction() Vector {
 	return result.Unit()
 }
 
-func (flock Flock) Update() error {
+func (flock Flock) Update(target Vertex) error {
 	for _, bird := range flock.Birds {
 		bird.Move()
 	}
 	pointOfMass := flock.PointOfMass()
 	direction := flock.Direction()
 	for _, bird := range flock.Birds {
-		err := bird.Adjust(flock.Birds, pointOfMass, direction)
+		err := bird.Adjust(flock.Birds, pointOfMass, direction, target)
 		if err != nil {
 			return err
 		}
 	}
+	for _, bird := range flock.Birds {
+		bird.Turn()
+	}
 	return nil
+}
+
+func (flock *Flock) Draw(screen *ebiten.Image) {
+	for _, bird := range flock.Birds {
+		bird.Draw(screen)
+	}
 }

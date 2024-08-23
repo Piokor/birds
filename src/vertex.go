@@ -42,6 +42,13 @@ func (vector Vector) Multiply(n float64) Vector {
 	}
 }
 
+func (vector Vector) Add(otherVector Vector) Vector {
+	return Vector{
+		vector.X + otherVector.X,
+		vector.Y + otherVector.Y,
+	}
+}
+
 func (vector Vector) Reverse() Vector {
 	return Vector{
 		-vector.X,

@@ -1,23 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	birds "github.com/Piokor/birds/src"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 func main() {
-	b1 := birds.NewBird(
-		10, 10, 0, 0,
-	)
-	b2 := birds.NewBird(
-		10, 10, 0, 0,
-	)
-	flock := birds.Flock{
-		Birds: []*birds.Bird{b1, b2},
+	birdsNum := 100
+	birdsList := make([]*birds.Bird, birdsNum)
+	for i := range birdsNum {
+		birdsList[i] = birds.NewRandomBird(birds.SCREEN_WIDTH, birds.SCREEN_HEIGHT)
 	}
-	for range 10 {
-		fmt.Println(flock)
-		flock.Update()
+	flock := birds.Flock{
+		Birds: birdsList,
+	}
+	ebiten.SetWindowSize(birds.SCREEN_WIDTH, birds.SCREEN_HEIGHT)
+	ebiten.SetWindowTitle("Birds")
+	if err := ebiten.RunGame(birds.NewGame(flock)); err != nil {
+		log.Fatal(err)
 	}
 }
